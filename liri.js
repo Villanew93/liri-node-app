@@ -18,7 +18,36 @@ const fs = require("fs");
 //initialize spotify
 var spotify = new Spotify(keys.spotify);
 
-//spotify-this-song
+ // app logic
+ var pick = function(caseData, functionData) {
+    switch (caseData) {
+    case "concert-this":
+      getBands(functionData);
+      break;
+    case "spotify-this-song":
+      getSpotify(functionData);
+      break;
+    case "movie-this":
+      getMovies(functionData);
+      break;
+    case "do-what-it-says":
+      doWhatItSays();
+      break;
+    default:
+      console.log("LIRI doesn't know that");
+    }
+  };
+  
+  
+  var runThis = function(argOne, argTwo) {
+    pick(argOne, argTwo);
+  };
+  
+  
+  runThis(process.argv[2], process.argv.slice(3).join(" "));
+  
+
+//spotify-this-song function
 
 //artist name
 var getArtistNames = function(artist) {
@@ -26,9 +55,9 @@ var getArtistNames = function(artist) {
   };
   
   // Function for running a Spotify search
-  var getMeSpotify = function(songName) {
+  function getSpotify(songName) {
     if (songName === undefined) {
-      songName = "";
+      songName = "patience";
     }
   
     spotify.search(
@@ -58,7 +87,7 @@ var getArtistNames = function(artist) {
   
   // concert-this function
 
-  var getMyBands = function(artist) {
+  function getBands(artist) {
     var queryURL = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp";
   
     axios.get(queryURL).then(
@@ -92,9 +121,9 @@ var getArtistNames = function(artist) {
   //movie-this function
   
   // Movie Search
-  var getMovie = function(movieName) {
+   function getMovies(movieName) {
     if (movieName === undefined) {
-      movieName = "Mr Nobody";
+      movieName = "Gladiator";
     }
   
     var urlHit =
@@ -120,7 +149,7 @@ var getArtistNames = function(artist) {
   //do-what-it-says function
 
   // running commands function
-  var doWhatItSays = function() {
+  function doWhatItSays() {
     fs.readFile("random.txt", "utf8", function(error, data) {
       console.log(data);
   
@@ -134,31 +163,4 @@ var getArtistNames = function(artist) {
     });
   };
   
-  // app logic
-  var pick = function(caseData, functionData) {
-    switch (caseData) {
-    case "concert-this":
-      getMyBands(functionData);
-      break;
-    case "spotify-this-song":
-      getMeSpotify(functionData);
-      break;
-    case "movie-this":
-      getMeMovie(functionData);
-      break;
-    case "do-what-it-says":
-      doWhatItSays();
-      break;
-    default:
-      console.log("LIRI doesn't know that");
-    }
-  };
-  
-  
-  var runThis = function(argOne, argTwo) {
-    pick(argOne, argTwo);
-  };
-  
-  
-  runThis(process.argv[2], process.argv.slice(3).join(" "));
   
